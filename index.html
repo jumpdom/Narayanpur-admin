@@ -214,6 +214,25 @@
         .modal-list-item .t-date { font-size: 0.85rem; color: #b30000; font-weight: 500; }
         .modal-list-item .t-time { font-size: 0.75rem; color: #555; margin-top: 2px; }
 
+        /* Image Zoom Modal Styles */
+        #imageModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+        #imageModal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(255,255,255,0.2);
+        }
+
         .close-btn, .btn {
             background: #ff9933;
             color: white;
@@ -294,11 +313,16 @@
             overflow: hidden;
             height: 220px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
         }
-        .gallery-item img, .gallery-item video {
+        .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05);
         }
         
         .delete-media-btn {
@@ -313,6 +337,7 @@
             cursor: pointer;
             font-size: 0.9rem;
             display: none;
+            z-index: 10;
         }
 
         footer {
@@ -325,6 +350,8 @@
         }
         footer span { color: #ffcc00; }
         footer a { color: #4facfe; text-decoration: none; }
+        .dev-by { margin-top: 8px; font-size: 0.85rem; color: #aaa; }
+        .dev-by span { color: #ff9933; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -437,7 +464,7 @@
 
     </div>
 
-    <!-- MODAL -->
+    <!-- MODAL FOR DETAILS -->
     <div id="detailModal">
         <div class="modal-content">
             <h3 id="modalTitle">विवरण</h3>
@@ -446,9 +473,15 @@
         </div>
     </div>
 
+    <!-- MODAL FOR FULL SCREEN IMAGE -->
+    <div id="imageModal" onclick="closeImageModal()">
+        <img id="fullScreenImg" src="" alt="Zoomed Image">
+    </div>
+
     <footer>
         <p>&copy; 2026 <span>Narayanpur Puja Committee</span>. All Rights Reserved.<br>
         <a href="https://www.facebook.com/profile.php?id=61551497346231&mibextid=wwXIfr" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook Page</a></p>
+        <div class="dev-by">Development by <span>Amit</span></div>
     </footer>
 
     <script>
@@ -496,12 +529,21 @@
                     let isAdminVisible = (document.getElementById('adminDashboardBox').style.display === 'block') ? 'block' : 'none';
                     
                     html += `<div class="gallery-item" id="${docId}">
-                        <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
+                        <img src="${item.url}" onclick="openImageModal('${item.url}')" style="width:100%; height:100%; object-fit:cover;">
                         <button class="delete-media-btn" style="display:${isAdminVisible};" onclick="deleteGalleryItem('${docId}')"><i class="fa-solid fa-trash"></i></button>
                     </div>`;
                 });
                 grid.innerHTML = html;
             });
+        }
+
+        function openImageModal(url) {
+            document.getElementById('fullScreenImg').src = url;
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
         }
 
         function verifyAdminLogin() {
@@ -552,7 +594,6 @@
             }
         }
 
-        // लिंक के माध्यम से गैलरी में फोटो सेव करने का फंक्शन
         function saveMediaAdmin() {
             const url = document.getElementById('mediaUrlInput').value;
             
