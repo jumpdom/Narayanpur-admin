@@ -148,20 +148,26 @@
 
         .panjika-grid-4 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
             margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .panjika-grid-4 {
+                grid-template-columns: repeat(2, 1fr); /* मोबाइल में 2x2 हो जाएंगे ताकि साफ़ दिखें */
+            }
         }
 
         .category-box {
             background: linear-gradient(135deg, #fff9f0, #ffe6cc);
-            padding: 25px 15px;
-            border-radius: 12px;
+            padding: 15px 8px;
+            border-radius: 10px;
             border: 2px solid #ff9933;
             text-align: center;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .category-box:hover {
@@ -173,9 +179,9 @@
 
         .category-box:hover i, .category-box:hover h4, .category-box:hover p { color: white; }
 
-        .category-box i { font-size: 2.5rem; color: #b30000; margin-bottom: 12px; transition: 0.3s; }
-        .category-box h4 { font-size: 1.1rem; color: #b30000; margin-bottom: 5px; font-family: 'Yatra One', cursive; transition: 0.3s; }
-        .category-box p { font-size: 0.8rem; color: #666; transition: 0.3s; }
+        .category-box i { font-size: 1.8rem; color: #b30000; margin-bottom: 8px; transition: 0.3s; }
+        .category-box h4 { font-size: 0.9rem; color: #b30000; margin-bottom: 4px; font-family: 'Yatra One', cursive; transition: 0.3s; }
+        .category-box p { font-size: 0.7rem; color: #666; transition: 0.3s; }
 
         /* Modal Styles */
         #detailModal {
@@ -336,9 +342,7 @@
 
     <nav>
         <a href="#panjika"><i class="fa-solid fa-calendar-days"></i> हिन्दू पंजिका</a>
-        <a href="#festivals"><i class="fa-solid fa-fire"></i> उत्सव & पूजा</a>
         <a href="#gallery"><i class="fa-solid fa-images"></i> गैलरी</a>
-        <a href="#collection"><i class="fa-solid fa-hand-holding-dollar"></i> सहयोग राशि</a>
         <a href="#adminSection" style="color: #ffcc00;"><i class="fa-solid fa-lock"></i> Admin Login</a>
     </nav>
 
@@ -355,23 +359,23 @@
                 <div class="panjika-grid-4">
                     <div class="category-box" onclick="showCategoryDetails('ekadashi')">
                         <i class="fa-solid fa-moon"></i>
-                        <h4>एकादशी तिथियां (सभी 24)</h4>
-                        <p>सूची देखने के लिए क्लिक करें</p>
+                        <h4>एकादशी</h4>
+                        <p>सभी 24 तिथियां</p>
                     </div>
                     <div class="category-box" onclick="showCategoryDetails('purnima')">
                         <i class="fa-solid fa-circle"></i>
-                        <h4>पूर्णिमा तिथियां (सभी 12)</h4>
-                        <p>सूची देखने के लिए क्लिक करें</p>
+                        <h4>पूर्णिमा</h4>
+                        <p>सभी 12 तिथियां</p>
                     </div>
                     <div class="category-box" onclick="showCategoryDetails('amavasya')">
                         <i class="fa-solid fa-circle-half-stroke"></i>
-                        <h4>अमावस्या तिथियां (सभी 12)</h4>
-                        <p>सूची देखने के लिए क्लिक करें</p>
+                        <h4>अमावस्या</h4>
+                        <p>सभी 12 तिथियां</p>
                     </div>
                     <div class="category-box" onclick="showCategoryDetails('puja')">
                         <i class="fa-solid fa-fire-flame-curved"></i>
-                        <h4>हिन्दू पूजा डेट लिस्ट</h4>
-                        <p>सूची देखने के लिए क्लिक करें</p>
+                        <h4>पूजा डेट</h4>
+                        <p>प्रमुख उत्सव लिस्ट</p>
                     </div>
                 </div>
             </div>
@@ -384,16 +388,6 @@
                 <!-- Data will load from Firebase -->
                 <p style="text-align: center; grid-column: 1/-1; color: #666;">गैलरी लोड हो रही है...</p>
             </div>
-        </section>
-
-        <!-- COLLECTION SECTION -->
-        <section id="collection" class="panjika-card" style="text-align: center; background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
-            <h2 class="section-title" style="margin-bottom: 10px;">सहयोग राशि (Collection)</h2>
-            <p>मंदिर के विकास कार्यों और आयोजनों में अपना स्वेच्छा से योगदान दें।</p>
-            <div id="qrContainer" style="width: 150px; height: 150px; background: #fff; margin: 15px auto; display: flex; justify-content: center; align-items: center; border: 2px dashed #ff9933; border-radius: 10px;">
-                <span>QR Code Here</span>
-            </div>
-            <button class="btn" onclick="alert('UPI ID: narayanpurpuja@upi')">दान करें / Donate</button>
         </section>
 
         <!-- SECURE ADMIN PANEL SECTION -->
@@ -421,12 +415,6 @@
                     </div>
 
                     <div class="admin-card">
-                        <h4>📷 QR Code इमेज अपलोड करें</h4>
-                        <input type="file" id="uploadQrFile" accept="image/*">
-                        <button class="btn" style="background: #1877f2;" onclick="saveQrAdmin()">QR अपलोड करें</button>
-                    </div>
-
-                    <div class="admin-card">
                         <h4>📅 कार्यक्रम / बुरिमाँ पूजा एडिट करें</h4>
                         <select id="selectEventToEdit">
                             <option value="Burimaa">बुरिमाँ पूजा (विशेष)</option>
@@ -438,7 +426,7 @@
                         <button class="btn" style="background: #1877f2;" onclick="updateEventDetails()">डिटेल्स अपडेट करें</button>
                     </div>
 
-                    <div class="admin-card">
+                    <div class="admin-card" style="grid-column: 1/-1;">
                         <h4>🖼️ गैलरी फोटो/वीडियो जोड़ें</h4>
                         <input type="file" id="uploadMediaFile" accept="image/*,video/*">
                         <button class="btn" style="background: #1877f2;" onclick="saveMediaAdmin()">गैलरी में जोड़ें</button>
@@ -485,20 +473,15 @@
         };
 
         function loadWebsiteData() {
-            // Load Settings (Mantra & QR)
             db.collection("siteData").doc("config").get().then((doc) => {
                 if (doc.exists) {
                     const data = doc.data();
                     if(data.mantra) {
                         document.getElementById('displayMantra').textContent = data.mantra;
                     }
-                    if(data.qrImage) {
-                        document.getElementById('qrContainer').innerHTML = `<img src="${data.qrImage}" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">`;
-                    }
                 }
             });
 
-            // Load Gallery
             loadGalleryFromFirebase();
         }
 
@@ -531,7 +514,6 @@
             });
         }
 
-        // Admin Login
         function verifyAdminLogin() {
             const pass = document.getElementById('adminPasswordInput').value;
             if(pass === 'admin123') {
@@ -551,7 +533,6 @@
             document.querySelectorAll('.delete-media-btn').forEach(btn => btn.style.display = 'none');
         }
 
-        // Save Mantra to Firebase
         function saveMantraAdmin() {
             const txt = document.getElementById('editMantra').value;
             if(txt) {
@@ -562,23 +543,6 @@
             }
         }
 
-        // Save QR Code to Firebase
-        function saveQrAdmin() {
-            const file = document.getElementById('uploadQrFile').files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Str = e.target.result;
-                    db.collection("siteData").doc("config").set({ qrImage: base64Str }, { merge: true }).then(() => {
-                        document.getElementById('qrContainer').innerHTML = `<img src="${base64Str}" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">`;
-                        alert('QR Code ऑनलाइन अपडेट हो गया!');
-                    });
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Edit Event Details in Firebase
         function updateEventDetails() {
             const eventKey = document.getElementById('selectEventToEdit').value;
             const newName = document.getElementById('editEventNameInput').value;
@@ -598,7 +562,6 @@
             }
         }
 
-        // Save Media to Firebase Gallery
         function saveMediaAdmin() {
             const file = document.getElementById('uploadMediaFile').files[0];
             if(file) {
@@ -618,7 +581,6 @@
             }
         }
 
-        // Delete Gallery Item from Firebase
         function deleteGalleryItem(docId) {
             if(confirm('क्या आप वाकई इस फोटो/वीडियो को डिलीट करना चाहते हैं?')) {
                 db.collection("gallery").doc(docId).delete().then(() => {
@@ -628,7 +590,6 @@
             }
         }
 
-        // Panjika Core Logic
         const yearSelect = document.getElementById('yearSelect');
         for (let y = 2026; y <= 2070; y++) {
             let opt = document.createElement('option');
@@ -673,7 +634,6 @@
                     { name: burimaName, date: burimaDate, start: "प्रातः 05:00 AM", end: "रात्रि 11:00 PM" }
                 ];
             }).catch(() => {
-                // Fallback if offline/error
                 currentPuja = [
                     { name: "मकर संक्रांति", date: calcDate(14, 1), start: "प्रातः 07:15 AM", end: "दोपहर 12:30 PM" },
                     { name: "बुरिमाँ पूजा (विशेष)", date: calcDate(15, 4), start: "प्रातः 05:00 AM", end: "रात्रि 11:00 PM" }
