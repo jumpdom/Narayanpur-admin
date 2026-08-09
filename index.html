@@ -7,6 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Yatra+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -291,7 +295,6 @@
             object-fit: cover;
         }
         
-        /* Delete button over gallery item for Admin */
         .delete-media-btn {
             position: absolute;
             top: 8px;
@@ -303,7 +306,7 @@
             border-radius: 50%;
             cursor: pointer;
             font-size: 0.9rem;
-            display: none; /* Admin mode me visible hoga */
+            display: none;
         }
 
         footer {
@@ -378,15 +381,8 @@
         <section id="gallery">
             <h2 class="section-title">उत्सव गैलरी (फोटो & वीडियो)</h2>
             <div class="gallery-grid" id="dynamicGalleryGrid">
-                <!-- Default Items -->
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c52" alt="Gallery">
-                    <button class="delete-media-btn" onclick="deleteGalleryItem(this)"><i class="fa-solid fa-trash"></i></button>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220" alt="Gallery">
-                    <button class="delete-media-btn" onclick="deleteGalleryItem(this)"><i class="fa-solid fa-trash"></i></button>
-                </div>
+                <!-- Data will load from Firebase -->
+                <p style="text-align: center; grid-column: 1/-1; color: #666;">गैलरी लोड हो रही है...</p>
             </div>
         </section>
 
@@ -404,7 +400,6 @@
         <section id="adminSection" class="admin-wrapper">
             <h2 class="section-title" style="color: #1877f2;">⚙️ Admin Secure Dashboard</h2>
             
-            <!-- Login Form -->
             <div id="adminLoginBox" class="login-box">
                 <h3 style="color: #b30000; margin-bottom: 10px;"><i class="fa-solid fa-lock"></i> Admin Login</h3>
                 <p style="font-size: 0.85rem; color: #666;">पैनल एक्सेस करने के लिए पासवर्ड दर्ज करें</p>
@@ -412,7 +407,6 @@
                 <button class="btn" style="background: #1877f2; width: 100%;" onclick="verifyAdminLogin()">लॉगिन करें</button>
             </div>
 
-            <!-- Actual Dashboard (Hidden until login) -->
             <div id="adminDashboardBox" class="admin-dashboard">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h3 style="color: #1877f2;">स्वागत है, एडमिन जी!</h3>
@@ -420,21 +414,18 @@
                 </div>
 
                 <div class="admin-grid">
-                    <!-- 1. Mantra Update -->
                     <div class="admin-card">
                         <h4>📜 मंत्र / डिस्क्लेमर बदलें</h4>
                         <textarea id="editMantra" rows="3" placeholder="नया मंत्र या कथा यहाँ लिखें..."></textarea>
                         <button class="btn" style="background: #1877f2;" onclick="saveMantraAdmin()">सेव करें</button>
                     </div>
 
-                    <!-- 2. QR Code Upload -->
                     <div class="admin-card">
                         <h4>📷 QR Code इमेज अपलोड करें</h4>
                         <input type="file" id="uploadQrFile" accept="image/*">
                         <button class="btn" style="background: #1877f2;" onclick="saveQrAdmin()">QR अपलोड करें</button>
                     </div>
 
-                    <!-- 3. Edit Program / Burimaa Puja Details -->
                     <div class="admin-card">
                         <h4>📅 कार्यक्रम / बुरिमाँ पूजा एडिट करें</h4>
                         <select id="selectEventToEdit">
@@ -447,12 +438,11 @@
                         <button class="btn" style="background: #1877f2;" onclick="updateEventDetails()">डिटेल्स अपडेट करें</button>
                     </div>
 
-                    <!-- 4. Upload & Delete Gallery Media -->
                     <div class="admin-card">
                         <h4>🖼️ गैलरी फोटो/वीडियो जोड़ें</h4>
                         <input type="file" id="uploadMediaFile" accept="image/*,video/*">
                         <button class="btn" style="background: #1877f2;" onclick="saveMediaAdmin()">गैलरी में जोड़ें</button>
-                        <p style="font-size: 0.75rem; color: #666; margin-top: 8px;">💡 नोट: फोटो डिलीट करने के लिए गैलरी पर दिख रहे लाल डस्टबिन (Delete) आइकॉन पर क्लिक करें।</p>
+                        <p style="font-size: 0.75rem; color: #666; margin-top: 8px;">💡 नोट: फोटो डिलीट करने के लिए गैलरी पर दिख रहे लाल डस्टबिन आइकॉन पर क्लिक करें।</p>
                     </div>
                 </div>
             </div>
@@ -475,18 +465,71 @@
     </footer>
 
     <script>
-        // Load Saved Data on Page Load
-        window.onload = function() {
-            if(localStorage.getItem('savedMantraText')) {
-                document.getElementById('displayMantra').textContent = localStorage.getItem('savedMantraText');
-            }
-            if(localStorage.getItem('savedQrImage')) {
-                document.getElementById('qrContainer').innerHTML = `<img src="${localStorage.getItem('savedQrImage')}" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">`;
-            }
-            if(localStorage.getItem('savedGalleryHTML')) {
-                document.getElementById('dynamicGalleryGrid').innerHTML = localStorage.getItem('savedGalleryHTML');
-            }
+        // Firebase Initialization
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsXWZHkRNMKwekrlaCEYVKE3Y2dlTQUo0",
+            authDomain: "narayanpur-puja.firebaseapp.com",
+            projectId: "narayanpur-puja",
+            storageBucket: "narayanpur-puja.firebasestorage.app",
+            messagingSenderId: "872813899244",
+            appId: "1:872813899244:web:58d16eb64eac212b7e24c9",
+            measurementId: "G-V2XM0ER3RK"
         };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Load Data from Firebase on Page Load
+        window.onload = function() {
+            loadWebsiteData();
+        };
+
+        function loadWebsiteData() {
+            // Load Settings (Mantra & QR)
+            db.collection("siteData").doc("config").get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if(data.mantra) {
+                        document.getElementById('displayMantra').textContent = data.mantra;
+                    }
+                    if(data.qrImage) {
+                        document.getElementById('qrContainer').innerHTML = `<img src="${data.qrImage}" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">`;
+                    }
+                }
+            });
+
+            // Load Gallery
+            loadGalleryFromFirebase();
+        }
+
+        function loadGalleryFromFirebase() {
+            const grid = document.getElementById('dynamicGalleryGrid');
+            db.collection("gallery").get().then((querySnapshot) => {
+                let html = "";
+                if(querySnapshot.empty) {
+                    grid.innerHTML = `<p style="text-align: center; grid-column: 1/-1; color: #666;">कोई फोटो उपलब्ध नहीं है।</p>`;
+                    return;
+                }
+                querySnapshot.forEach((doc) => {
+                    const item = doc.data();
+                    const docId = doc.id;
+                    let isAdminVisible = (document.getElementById('adminDashboardBox').style.display === 'block') ? 'block' : 'none';
+                    
+                    if(item.type && item.type.startsWith('video')) {
+                        html += `<div class="gallery-item" id="${docId}">
+                            <video src="${item.url}" controls style="width:100%; height:100%;"></video>
+                            <button class="delete-media-btn" style="display:${isAdminVisible};" onclick="deleteGalleryItem('${docId}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>`;
+                    } else {
+                        html += `<div class="gallery-item" id="${docId}">
+                            <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
+                            <button class="delete-media-btn" style="display:${isAdminVisible};" onclick="deleteGalleryItem('${docId}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>`;
+                    }
+                });
+                grid.innerHTML = html;
+            });
+        }
 
         // Admin Login
         function verifyAdminLogin() {
@@ -494,7 +537,6 @@
             if(pass === 'admin123') {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminDashboardBox').style.display = 'block';
-                // Show Delete buttons on gallery images for Admin
                 document.querySelectorAll('.delete-media-btn').forEach(btn => btn.style.display = 'block');
                 alert('सफलतापूर्वक एडमिन लॉगिन हो गए!');
             } else {
@@ -506,81 +548,83 @@
             document.getElementById('adminDashboardBox').style.display = 'none';
             document.getElementById('adminLoginBox').style.display = 'block';
             document.getElementById('adminPasswordInput').value = '';
-            // Hide Delete buttons when logged out
             document.querySelectorAll('.delete-media-btn').forEach(btn => btn.style.display = 'none');
         }
 
-        // Save Mantra
+        // Save Mantra to Firebase
         function saveMantraAdmin() {
             const txt = document.getElementById('editMantra').value;
             if(txt) {
-                localStorage.setItem('savedMantraText', txt);
-                document.getElementById('displayMantra').textContent = txt;
-                alert('मंत्र/डिस्क्लेमर सफलतापूर्ण अपडेट हो गया!');
+                db.collection("siteData").doc("config").set({ mantra: txt }, { merge: true }).then(() => {
+                    document.getElementById('displayMantra').textContent = txt;
+                    alert('मंत्र ऑनलाइन अपडेट हो गया!');
+                });
             }
         }
 
-        // Save QR Code
+        // Save QR Code to Firebase
         function saveQrAdmin() {
             const file = document.getElementById('uploadQrFile').files[0];
             if(file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    localStorage.setItem('savedQrImage', e.target.result);
-                    document.getElementById('qrContainer').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">`;
-                    alert('QR Code अपडेट हो गया!');
+                    const base64Str = e.target.result;
+                    db.collection("siteData").doc("config").set({ qrImage: base64Str }, { merge: true }).then(() => {
+                        document.getElementById('qrContainer').innerHTML = `<img src="${base64Str}" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">`;
+                        alert('QR Code ऑनलाइन अपडेट हो गया!');
+                    });
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        // Edit Event Details
+        // Edit Event Details in Firebase
         function updateEventDetails() {
             const eventKey = document.getElementById('selectEventToEdit').value;
             const newName = document.getElementById('editEventNameInput').value;
             const newDate = document.getElementById('editEventDateInput').value;
 
             if(newName && newDate) {
-                localStorage.setItem(eventKey + '_name', newName);
-                localStorage.setItem(eventKey + '_date', newDate);
-                alert('कार्यक्रम की डिटेल्स सफलतापूर्वक अपडेट कर दी गई हैं!');
+                let updateObj = {};
+                updateObj[eventKey + '_name'] = newName;
+                updateObj[eventKey + '_date'] = newDate;
+
+                db.collection("siteData").doc("events").set(updateObj, { merge: true }).then(() => {
+                    alert('कार्यक्रम की डिटेल्स ऑनलाइन अपडेट कर दी गई हैं!');
+                    updatePanjikaYear();
+                });
             } else {
                 alert('कृपया नया नाम और तारीख दोनों भरें।');
             }
         }
 
-        // Save Media to Gallery
+        // Save Media to Firebase Gallery
         function saveMediaAdmin() {
             const file = document.getElementById('uploadMediaFile').files[0];
             if(file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const grid = document.getElementById('dynamicGalleryGrid');
-                    const newItem = document.createElement('div');
-                    newItem.className = 'gallery-item';
-                    
-                    if(file.type.startsWith('video')) {
-                        newItem.innerHTML = `<video src="${e.target.result}" controls style="width:100%; height:100%;"></video><button class="delete-media-btn" style="display:block;" onclick="deleteGalleryItem(this)"><i class="fa-solid fa-trash"></i></button>`;
-                    } else {
-                        newItem.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;"><button class="delete-media-btn" style="display:block;" onclick="deleteGalleryItem(this)"><i class="fa-solid fa-trash"></i></button>`;
-                    }
-                    
-                    grid.prepend(newItem);
-                    localStorage.setItem('savedGalleryHTML', grid.innerHTML);
-                    alert('नया फोटो/वीडियो गैलरी में जोड़ दिया गया है!');
+                    const base64Data = e.target.result;
+                    db.collection("gallery").add({
+                        url: base64Data,
+                        type: file.type,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        alert('नया फोटो/वीडियो ऑनलाइन गैलरी में जोड़ दिया गया है!');
+                        loadGalleryFromFirebase();
+                    });
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        // Delete Gallery Item function
-        function deleteGalleryItem(btn) {
+        // Delete Gallery Item from Firebase
+        function deleteGalleryItem(docId) {
             if(confirm('क्या आप वाकई इस फोटो/वीडियो को डिलीट करना चाहते हैं?')) {
-                const item = btn.parentElement;
-                item.remove();
-                const grid = document.getElementById('dynamicGalleryGrid');
-                localStorage.setItem('savedGalleryHTML', grid.innerHTML);
-                alert('फोटो सफलतापूर्वक डिलीट हो गई है!');
+                db.collection("gallery").doc(docId).delete().then(() => {
+                    alert('फोटो सफलतापूर्वक डिलीट हो गई है!');
+                    loadGalleryFromFirebase();
+                });
             }
         }
 
@@ -608,25 +652,33 @@
                 return `${d} ${monthsName[m-1]} ${yr}`;
             }
 
-            // Check if Custom Edited Name/Date exists in LocalStorage for Puja
-            let burimaName = localStorage.getItem('Burima_name') || "बुरिमाँ पूजा (विशेष)";
-            let burimaDate = localStorage.getItem('Burima_date') || calcDate(15, 4);
+            db.collection("siteData").doc("events").get().then((doc) => {
+                let eData = doc.exists ? doc.data() : {};
+                let burimaName = eData.Burimaa_name || "बुरिमाँ पूजा (विशेष)";
+                let burimaDate = eData.Burimaa_date || calcDate(15, 4);
 
-            currentEkadashi = [
-                { name: "पुत्रदा एकादशी (शुक्ल पक्ष)", date: calcDate(12, 1), start: "रात 11:15 PM", end: "रात्रि 01:25 AM" },
-                { name: "षटतिला एकादशी (कृष्ण पक्ष)", date: calcDate(27, 1), start: "सुबह 05:40 AM", end: "अगले दिन 07:10 AM" }
-            ];
-            currentPurnima = [
-                { name: "पौष पूर्णिमा", date: calcDate(2, 1), start: "सुबह 08:10 AM", end: "सुबह 10:35 AM" },
-                { name: "माघ पूर्णिमा", date: calcDate(31, 1), start: "शाम 05:20 PM", end: "शाम 07:45 PM" }
-            ];
-            currentAmavasya = [
-                { name: "पौष अमावस्या", date: calcDate(18, 1), start: "सुबह 06:30 AM", end: "सुबह 08:55 AM" }
-            ];
-            currentPuja = [
-                { name: localStorage.getItem('Makar_name') || "मकर संक्रांति", date: localStorage.getItem('Makar_date') || calcDate(14, 1), start: "प्रातः 07:15 AM", end: "दोपहर 12:30 PM" },
-                { name: burimaName, date: burimaDate, start: "प्रातः 05:00 AM", end: "रात्रि 11:00 PM" }
-            ];
+                currentEkadashi = [
+                    { name: "पुत्रदा एकादशी (शुक्ल पक्ष)", date: calcDate(12, 1), start: "रात 11:15 PM", end: "रात्रि 01:25 AM" },
+                    { name: "षटतिला एकादशी (कृष्ण पक्ष)", date: calcDate(27, 1), start: "सुबह 05:40 AM", end: "अगले दिन 07:10 AM" }
+                ];
+                currentPurnima = [
+                    { name: "पौष पूर्णिमा", date: calcDate(2, 1), start: "सुबह 08:10 AM", end: "सुबह 10:35 AM" },
+                    { name: "माघ पूर्णिमा", date: calcDate(31, 1), start: "शाम 05:20 PM", end: "शाम 07:45 PM" }
+                ];
+                currentAmavasya = [
+                    { name: "पौष अमावस्या", date: calcDate(18, 1), start: "सुबह 06:30 AM", end: "सुबह 08:55 AM" }
+                ];
+                currentPuja = [
+                    { name: eData.Makar_name || "मकर संक्रांति", date: eData.Makar_date || calcDate(14, 1), start: "प्रातः 07:15 AM", end: "दोपहर 12:30 PM" },
+                    { name: burimaName, date: burimaDate, start: "प्रातः 05:00 AM", end: "रात्रि 11:00 PM" }
+                ];
+            }).catch(() => {
+                // Fallback if offline/error
+                currentPuja = [
+                    { name: "मकर संक्रांति", date: calcDate(14, 1), start: "प्रातः 07:15 AM", end: "दोपहर 12:30 PM" },
+                    { name: "बुरिमाँ पूजा (विशेष)", date: calcDate(15, 4), start: "प्रातः 05:00 AM", end: "रात्रि 11:00 PM" }
+                ];
+            });
         }
 
         function showCategoryDetails(type) {
