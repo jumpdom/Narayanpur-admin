@@ -64,9 +64,7 @@
             transition: 0.3s;
         }
 
-        .fb-btn:hover {
-            background: #145dbf;
-        }
+        .fb-btn:hover { background: #145dbf; }
 
         nav {
             background: #222;
@@ -169,30 +167,11 @@
             border-color: #b30000;
         }
 
-        .category-box:hover i, .category-box:hover h4, .category-box:hover p {
-            color: white;
-        }
+        .category-box:hover i, .category-box:hover h4, .category-box:hover p { color: white; }
 
-        .category-box i {
-            font-size: 2.5rem;
-            color: #b30000;
-            margin-bottom: 12px;
-            transition: 0.3s;
-        }
-
-        .category-box h4 {
-            font-size: 1.1rem;
-            color: #b30000;
-            margin-bottom: 5px;
-            font-family: 'Yatra One', cursive;
-            transition: 0.3s;
-        }
-
-        .category-box p {
-            font-size: 0.8rem;
-            color: #666;
-            transition: 0.3s;
-        }
+        .category-box i { font-size: 2.5rem; color: #b30000; margin-bottom: 12px; transition: 0.3s; }
+        .category-box h4 { font-size: 1.1rem; color: #b30000; margin-bottom: 5px; font-family: 'Yatra One', cursive; transition: 0.3s; }
+        .category-box p { font-size: 0.8rem; color: #666; transition: 0.3s; }
 
         /* Modal Styles */
         #detailModal {
@@ -219,22 +198,8 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .modal-content h3 {
-            color: #b30000;
-            margin-bottom: 15px;
-            font-family: 'Yatra One', cursive;
-            font-size: 1.4rem;
-        }
-
-        .modal-list-item {
-            background: #fff9f0;
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            border-radius: 6px;
-            border-left: 4px solid #b30000;
-            text-align: left;
-        }
-
+        .modal-content h3 { color: #b30000; margin-bottom: 15px; font-family: 'Yatra One', cursive; font-size: 1.4rem; }
+        .modal-list-item { background: #fff9f0; padding: 10px 12px; margin-bottom: 8px; border-radius: 6px; border-left: 4px solid #b30000; text-align: left; }
         .modal-list-item .t-name { font-weight: 600; color: #333; font-size: 0.95rem; }
         .modal-list-item .t-date { font-size: 0.85rem; color: #b30000; font-weight: 500; }
         .modal-list-item .t-time { font-size: 0.75rem; color: #555; margin-top: 2px; }
@@ -252,7 +217,7 @@
         .close-btn { background: #b30000; margin-top: 15px; }
         .btn:hover { background: #e68a00; }
 
-        /* --- PROFESSIONAL ADMIN PANEL DESIGN --- */
+        /* Admin Panel Styles */
         .admin-wrapper {
             background: #f0f4f8;
             border: 2px dashed #1877f2;
@@ -280,10 +245,7 @@
             font-size: 1rem;
         }
 
-        .admin-dashboard {
-            display: none;
-        }
-
+        .admin-dashboard { display: none; }
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -299,13 +261,8 @@
             border-top: 4px solid #1877f2;
         }
 
-        .admin-card h4 {
-            color: #1877f2;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        .admin-card input, .admin-card textarea {
+        .admin-card h4 { color: #1877f2; margin-bottom: 12px; font-size: 1.1rem; }
+        .admin-card input, .admin-card textarea, .admin-card select {
             width: 100%;
             padding: 8px 10px;
             margin-bottom: 10px;
@@ -322,6 +279,7 @@
             margin-bottom: 40px;
         }
         .gallery-item {
+            position: relative;
             border-radius: 10px;
             overflow: hidden;
             height: 220px;
@@ -331,6 +289,21 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        
+        /* Delete button over gallery item for Admin */
+        .delete-media-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: none; /* Admin mode me visible hoga */
         }
 
         footer {
@@ -405,8 +378,15 @@
         <section id="gallery">
             <h2 class="section-title">उत्सव गैलरी (फोटो & वीडियो)</h2>
             <div class="gallery-grid" id="dynamicGalleryGrid">
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c52" alt="Gallery"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220" alt="Gallery"></div>
+                <!-- Default Items -->
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c52" alt="Gallery">
+                    <button class="delete-media-btn" onclick="deleteGalleryItem(this)"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220" alt="Gallery">
+                    <button class="delete-media-btn" onclick="deleteGalleryItem(this)"><i class="fa-solid fa-trash"></i></button>
+                </div>
             </div>
         </section>
 
@@ -428,7 +408,7 @@
             <div id="adminLoginBox" class="login-box">
                 <h3 style="color: #b30000; margin-bottom: 10px;"><i class="fa-solid fa-lock"></i> Admin Login</h3>
                 <p style="font-size: 0.85rem; color: #666;">पैनल एक्सेस करने के लिए पासवर्ड दर्ज करें</p>
-                <input type="password" id="adminPasswordInput" placeholder="पासवर्ड दर्ज करें (default: admin123)">
+                <input type="password" id="adminPasswordInput" placeholder="पासवर्ड (default: admin123)">
                 <button class="btn" style="background: #1877f2; width: 100%;" onclick="verifyAdminLogin()">लॉगिन करें</button>
             </div>
 
@@ -440,7 +420,7 @@
                 </div>
 
                 <div class="admin-grid">
-                    <!-- 1. Mantra & Disclaimer Update -->
+                    <!-- 1. Mantra Update -->
                     <div class="admin-card">
                         <h4>📜 मंत्र / डिस्क्लेमर बदलें</h4>
                         <textarea id="editMantra" rows="3" placeholder="नया मंत्र या कथा यहाँ लिखें..."></textarea>
@@ -454,19 +434,25 @@
                         <button class="btn" style="background: #1877f2;" onclick="saveQrAdmin()">QR अपलोड करें</button>
                     </div>
 
-                    <!-- 3. Event / Burimaa Puja Date Customization -->
+                    <!-- 3. Edit Program / Burimaa Puja Details -->
                     <div class="admin-card">
-                        <h4>📅 बुरिमाँ पूजा / कार्यक्रम दिनांक</h4>
-                        <input type="text" id="editEventName" placeholder="कार्यक्रम का नाम">
-                        <input type="text" id="editEventDate" placeholder="नई तारीख (जैसे: 15 अप्रैल)">
-                        <button class="btn" style="background: #1877f2;" onclick="saveEventAdmin()">तारीख अपडेट करें</button>
+                        <h4>📅 कार्यक्रम / बुरिमाँ पूजा एडिट करें</h4>
+                        <select id="selectEventToEdit">
+                            <option value="Burimaa">बुरिमाँ पूजा (विशेष)</option>
+                            <option value="Makar">मकर संक्रांति</option>
+                            <option value="Shivratri">महाशिवरात्रि</option>
+                        </select>
+                        <input type="text" id="editEventNameInput" placeholder="नया नाम">
+                        <input type="text" id="editEventDateInput" placeholder="नई तारीख व समय">
+                        <button class="btn" style="background: #1877f2;" onclick="updateEventDetails()">डिटेल्स अपडेट करें</button>
                     </div>
 
-                    <!-- 4. Photo / Video Upload -->
+                    <!-- 4. Upload & Delete Gallery Media -->
                     <div class="admin-card">
                         <h4>🖼️ गैलरी फोटो/वीडियो जोड़ें</h4>
                         <input type="file" id="uploadMediaFile" accept="image/*,video/*">
-                        <button class="btn" style="background: #1877f2;" onclick="saveMediaAdmin()">गैलरी में डालें</button>
+                        <button class="btn" style="background: #1877f2;" onclick="saveMediaAdmin()">गैलरी में जोड़ें</button>
+                        <p style="font-size: 0.75rem; color: #666; margin-top: 8px;">💡 नोट: फोटो डिलीट करने के लिए गैलरी पर दिख रहे लाल डस्टबिन (Delete) आइकॉन पर क्लिक करें।</p>
                     </div>
                 </div>
             </div>
@@ -489,7 +475,7 @@
     </footer>
 
     <script>
-        // Check Saved Admin Data on Page Load
+        // Load Saved Data on Page Load
         window.onload = function() {
             if(localStorage.getItem('savedMantraText')) {
                 document.getElementById('displayMantra').textContent = localStorage.getItem('savedMantraText');
@@ -502,13 +488,15 @@
             }
         };
 
-        // Admin Login System
+        // Admin Login
         function verifyAdminLogin() {
             const pass = document.getElementById('adminPasswordInput').value;
-            if(pass === 'admin123') { // Aap password yahan change kar sakte hain
+            if(pass === 'admin123') {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminDashboardBox').style.display = 'block';
-                alert('सफलतापूर्वक लॉगिन हो गए!');
+                // Show Delete buttons on gallery images for Admin
+                document.querySelectorAll('.delete-media-btn').forEach(btn => btn.style.display = 'block');
+                alert('सफलतापूर्वक एडमिन लॉगिन हो गए!');
             } else {
                 alert('गलत पासवर्ड! कृपया पुनः प्रयास करें।');
             }
@@ -518,6 +506,8 @@
             document.getElementById('adminDashboardBox').style.display = 'none';
             document.getElementById('adminLoginBox').style.display = 'block';
             document.getElementById('adminPasswordInput').value = '';
+            // Hide Delete buttons when logged out
+            document.querySelectorAll('.delete-media-btn').forEach(btn => btn.style.display = 'none');
         }
 
         // Save Mantra
@@ -530,7 +520,7 @@
             }
         }
 
-        // Save QR
+        // Save QR Code
         function saveQrAdmin() {
             const file = document.getElementById('uploadQrFile').files[0];
             if(file) {
@@ -544,14 +534,18 @@
             }
         }
 
-        // Save Event
-        function saveEventAdmin() {
-            const name = document.getElementById('editEventName').value;
-            const date = document.getElementById('editEventDate').value;
-            if(name && date) {
-                alert(name + ' की नई तारीख (' + date + ') सेव कर दी गई है!');
+        // Edit Event Details
+        function updateEventDetails() {
+            const eventKey = document.getElementById('selectEventToEdit').value;
+            const newName = document.getElementById('editEventNameInput').value;
+            const newDate = document.getElementById('editEventDateInput').value;
+
+            if(newName && newDate) {
+                localStorage.setItem(eventKey + '_name', newName);
+                localStorage.setItem(eventKey + '_date', newDate);
+                alert('कार्यक्रम की डिटेल्स सफलतापूर्वक अपडेट कर दी गई हैं!');
             } else {
-                alert('कृपया दोनों फील्ड भरें।');
+                alert('कृपया नया नाम और तारीख दोनों भरें।');
             }
         }
 
@@ -566,9 +560,9 @@
                     newItem.className = 'gallery-item';
                     
                     if(file.type.startsWith('video')) {
-                        newItem.innerHTML = `<video src="${e.target.result}" controls style="width:100%; height:100%;"></video>`;
+                        newItem.innerHTML = `<video src="${e.target.result}" controls style="width:100%; height:100%;"></video><button class="delete-media-btn" style="display:block;" onclick="deleteGalleryItem(this)"><i class="fa-solid fa-trash"></i></button>`;
                     } else {
-                        newItem.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+                        newItem.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;"><button class="delete-media-btn" style="display:block;" onclick="deleteGalleryItem(this)"><i class="fa-solid fa-trash"></i></button>`;
                     }
                     
                     grid.prepend(newItem);
@@ -579,7 +573,18 @@
             }
         }
 
-        // Panjika Script Setup
+        // Delete Gallery Item function
+        function deleteGalleryItem(btn) {
+            if(confirm('क्या आप वाकई इस फोटो/वीडियो को डिलीट करना चाहते हैं?')) {
+                const item = btn.parentElement;
+                item.remove();
+                const grid = document.getElementById('dynamicGalleryGrid');
+                localStorage.setItem('savedGalleryHTML', grid.innerHTML);
+                alert('फोटो सफलतापूर्वक डिलीट हो गई है!');
+            }
+        }
+
+        // Panjika Core Logic
         const yearSelect = document.getElementById('yearSelect');
         for (let y = 2026; y <= 2070; y++) {
             let opt = document.createElement('option');
@@ -603,10 +608,13 @@
                 return `${d} ${monthsName[m-1]} ${yr}`;
             }
 
+            // Check if Custom Edited Name/Date exists in LocalStorage for Puja
+            let burimaName = localStorage.getItem('Burima_name') || "बुरिमाँ पूजा (विशेष)";
+            let burimaDate = localStorage.getItem('Burima_date') || calcDate(15, 4);
+
             currentEkadashi = [
                 { name: "पुत्रदा एकादशी (शुक्ल पक्ष)", date: calcDate(12, 1), start: "रात 11:15 PM", end: "रात्रि 01:25 AM" },
-                { name: "षटतिला एकादशी (कृष्ण पक्ष)", date: calcDate(27, 1), start: "सुबह 05:40 AM", end: "अगले दिन 07:10 AM" },
-                { name: "जया एकादशी (शुक्ल पक्ष)", date: calcDate(11, 2), start: "सुबह 08:20 AM", end: "सुबह 10:40 AM" }
+                { name: "षटतिला एकादशी (कृष्ण पक्ष)", date: calcDate(27, 1), start: "सुबह 05:40 AM", end: "अगले दिन 07:10 AM" }
             ];
             currentPurnima = [
                 { name: "पौष पूर्णिमा", date: calcDate(2, 1), start: "सुबह 08:10 AM", end: "सुबह 10:35 AM" },
@@ -616,8 +624,8 @@
                 { name: "पौष अमावस्या", date: calcDate(18, 1), start: "सुबह 06:30 AM", end: "सुबह 08:55 AM" }
             ];
             currentPuja = [
-                { name: "मकर संक्रांति", date: calcDate(14, 1), start: "प्रातः 07:15 AM", end: "दोपहर 12:30 PM" },
-                { name: "बुरिमाँ पूजा (विशेष)", date: calcDate(15, 4), start: "प्रातः 05:00 AM", end: "रात्रि 11:00 PM" }
+                { name: localStorage.getItem('Makar_name') || "मकर संक्रांति", date: localStorage.getItem('Makar_date') || calcDate(14, 1), start: "प्रातः 07:15 AM", end: "दोपहर 12:30 PM" },
+                { name: burimaName, date: burimaDate, start: "प्रातः 05:00 AM", end: "रात्रि 11:00 PM" }
             ];
         }
 
