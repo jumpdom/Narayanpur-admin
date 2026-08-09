@@ -148,20 +148,20 @@
 
         .panjika-grid-4 {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* चारो बॉक्स एक ही लाइन में */
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
             margin-top: 20px;
         }
 
         @media (max-width: 768px) {
             .panjika-grid-4 {
-                grid-template-columns: repeat(4, 1fr); /* मोबाइल स्क्रीन पर भी चारों एक ही लाइन में छोटे रहेंगे */
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
         .category-box {
             background: linear-gradient(135deg, #fff9f0, #ffe6cc);
-            padding: 12px 4px; /* पैडिंग कम की ताकि मोबाइल/डेस्कटॉप दोनों पर परफेक्ट छोटे दिखें */
+            padding: 12px 4px;
             border-radius: 8px;
             border: 2px solid #ff9933;
             text-align: center;
@@ -385,7 +385,6 @@
         <section id="gallery">
             <h2 class="section-title">उत्सव गैलरी (फोटो & वीडियो)</h2>
             <div class="gallery-grid" id="dynamicGalleryGrid">
-                <!-- Data will load from Firebase -->
                 <p style="text-align: center; grid-column: 1/-1; color: #666;">गैलरी लोड हो रही है...</p>
             </div>
         </section>
@@ -427,10 +426,10 @@
                     </div>
 
                     <div class="admin-card" style="grid-column: 1/-1;">
-                        <h4>🖼️ गैलरी फोटो/वीडियो जोड़ें</h4>
-                        <input type="file" id="uploadMediaFile" accept="image/*,video/*">
-                        <button class="btn" style="background: #1877f2;" onclick="saveMediaAdmin()">गैलरी में जोड़ें</button>
-                        <p style="font-size: 0.75rem; color: #666; margin-top: 8px;">💡 नोट: फोटो डिलीट करने के लिए गैलरी पर दिख रहे लाल डस्टबिन आइकॉन पर क्लिक करें।</p>
+                        <h4>🖼️ गैलरी में फोटो लिंक जोड़ें</h4>
+                        <input type="text" id="mediaUrlInput" placeholder="यहाँ फोटो का URL (link) पेस्ट करें (जैसे ImgBB या Postimages लिंक)">
+                        <button class="btn" style="background: #1877f2;" onclick="saveMediaAdmin()">लिंक से गैलरी में जोड़ें</button>
+                        <p style="font-size: 0.75rem; color: #666; margin-top: 8px;">💡 टिप: फोटो डिलीट करने के लिए गैलरी पर दिख रहे लाल डस्टबिन आइकॉन पर क्लिक करें।</p>
                     </div>
                 </div>
             </div>
@@ -496,17 +495,10 @@
                     const docId = doc.id;
                     let isAdminVisible = (document.getElementById('adminDashboardBox').style.display === 'block') ? 'block' : 'none';
                     
-                    if(item.type && item.type.startsWith('video')) {
-                        html += `<div class="gallery-item" id="${docId}">
-                            <video src="${item.url}" controls style="width:100%; height:100%;"></video>
-                            <button class="delete-media-btn" style="display:${isAdminVisible};" onclick="deleteGalleryItem('${docId}')"><i class="fa-solid fa-trash"></i></button>
-                        </div>`;
-                    } else {
-                        html += `<div class="gallery-item" id="${docId}">
-                            <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
-                            <button class="delete-media-btn" style="display:${isAdminVisible};" onclick="deleteGalleryItem('${docId}')"><i class="fa-solid fa-trash"></i></button>
-                        </div>`;
-                    }
+                    html += `<div class="gallery-item" id="${docId}">
+                        <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="delete-media-btn" style="display:${isAdminVisible};" onclick="deleteGalleryItem('${docId}')"><i class="fa-solid fa-trash"></i></button>
+                    </div>`;
                 });
                 grid.innerHTML = html;
             });
@@ -560,27 +552,29 @@
             }
         }
 
+        // लिंक के माध्यम से गैलरी में फोटो सेव करने का फंक्शन
         function saveMediaAdmin() {
-            const file = document.getElementById('uploadMediaFile').files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Data = e.target.result;
-                    db.collection("gallery").add({
-                        url: base64Data,
-                        type: file.type,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    }).then(() => {
-                        alert('नया फोटो/वीडियो ऑनलाइन गैलरी में जोड़ दिया गया है!');
-                        loadGalleryFromFirebase();
-                    });
-                };
-                reader.readAsDataURL(file);
+            const url = document.getElementById('mediaUrlInput').value;
+            
+            if(url.trim() === "") {
+                alert("कृपया पहले फोटो का लिंक पेस्ट करें!");
+                return;
             }
+
+            db.collection("gallery").add({
+                url: url,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert('लिंक सफलतापूर्वक गैलरी में जुड़ गया है!');
+                document.getElementById('mediaUrlInput').value = "";
+                loadGalleryFromFirebase();
+            }).catch((error) => {
+                alert('गलती: ' + error.message);
+            });
         }
 
         function deleteGalleryItem(docId) {
-            if(confirm('क्या आप वाकई इस फोटो/वीडियो को डिलीट करना चाहते हैं?')) {
+            if(confirm('क्या आप वाकई इस फोटो को डिलीट करना चाहते हैं?')) {
                 db.collection("gallery").doc(docId).delete().then(() => {
                     alert('फोटो सफलतापूर्वक डिलीट हो गई है!');
                     loadGalleryFromFirebase();
@@ -599,7 +593,6 @@
 
         let currentEkadashi = [], currentPurnima = [], currentAmavasya = [], currentPuja = [];
 
-        // वर्ष के अनुसार वास्तविक तिथियां और पंजिका जनरेट करने वाला डायनामिक फंक्शन
         function updatePanjikaYear() {
             const yr = parseInt(document.getElementById('yearSelect').value);
             document.querySelectorAll('.disp-year').forEach(el => el.textContent = yr);
@@ -609,7 +602,6 @@
                 let burimaName = eData.Burimaa_name || "बुरिमाँ पूजा (विशेष)";
                 let mkarName = eData.Makar_name || "मकर संक्रांति";
 
-                // हर साल के अनुसार कैलेंडर लॉजिक और वास्तविक तिथियां
                 currentEkadashi = [
                     { name: "सफला एकादशी", date: `13 जनवरी ${yr}`, start: "प्रातः 06:12 AM", end: "अगले दिन 04:30 AM" },
                     { name: "पुत्रदा एकादशी", date: `28 जनवरी ${yr}`, start: "सुबह 07:20 AM", end: "सुबह 09:15 AM" },
@@ -627,7 +619,7 @@
                     { name: "कामदा/पवित्रा एकादशी", date: `24 जुलाई ${yr}`, start: "दोपहर 12:00 PM", end: "दोपहर 02:30 PM" },
                     { name: "अजा एकादशी", date: `7 अगस्त ${yr}`, start: "सुबह 05:45 AM", end: "सुबह 08:10 AM" },
                     { name: "परिवर्तिनी एकादशी", date: `22 अगस्त ${yr}`, start: "सुबह 06:20 AM", end: "सुबह 08:45 AM" },
-                    { name: "इందిरा एकादशी", date: `6 सितंबर ${yr}`, start: "सुबह 09:10 AM", end: "सुबह 11:35 AM" },
+                    { name: "इन्दिरा एकादशी", date: `6 सितंबर ${yr}`, start: "सुबह 09:10 AM", end: "सुबह 11:35 AM" },
                     { name: "पापांकुशा एकादशी", date: `21 सितंबर ${yr}`, start: "दोपहर 01:00 PM", end: "दोपहर 03:25 PM" },
                     { name: "रमा एकादशी", date: `6 अक्टूबर ${yr}`, start: "सुबह 07:00 AM", end: "सुबह 09:20 AM" },
                     { name: "देवोत्थान एकादशी", date: `20 अक्टूबर ${yr}`, start: "सुबह 08:15 AM", end: "सुबह 10:40 AM" },
@@ -676,7 +668,6 @@
                     { name: "विशाल काली पूजा", date: `19 नवंबर ${yr}`, start: "संध्या 07:00 PM", end: "रात्रि 03:00 AM" }
                 ];
             }).catch(() => {
-                // डिफ़ॉल्ट फॉलबैक वैल्यूज
                 currentPuja = [
                     { name: "मकर संक्रांति", date: `14 जनवरी ${yr}`, start: "प्रातः 07:15 AM", end: "दोपहर 12:30 PM" },
                     { name: "बुरिमाँ पूजा (विशेष)", date: `15 अप्रैल ${yr}`, start: "प्रातः 05:00 AM", end: "रात्रि 11:00 PM" }
