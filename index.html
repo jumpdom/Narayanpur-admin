@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Narayanpur Puja Committee - सनातन पंजिका & Admin Dashboard</title>
+    <title>Narayanpur Puja Committee - सनातन पंजिका, बांग्ला पंजिका & Admin Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Yatra+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -155,7 +155,7 @@
 
         @media (max-width: 768px) {
             .panjika-grid-4 {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -369,6 +369,7 @@
 
     <nav>
         <a href="#panjika"><i class="fa-solid fa-calendar-days"></i> हिन्दू पंजिका</a>
+        <a href="#banglaPanjika"><i class="fa-solid fa-calendar-alt"></i> बांग्ला पंजिका</a>
         <a href="#gallery"><i class="fa-solid fa-images"></i> गैलरी</a>
         <a href="#adminSection" style="color: #ffcc00;"><i class="fa-solid fa-lock"></i> Admin Login</a>
     </nav>
@@ -403,6 +404,39 @@
                         <i class="fa-solid fa-fire-flame-curved"></i>
                         <h4>पूजा डेट</h4>
                         <p>उत्सव लिस्ट</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BANGLA PANJIKA SECTION -->
+        <section id="banglaPanjika">
+            <h2 class="section-title">বাঙালি পঞ্জিকা (<span class="disp-bangla-year">১৪৩৩</span> বঙ্গাব্দ)</h2>
+            <div class="panjika-card" style="border-left-color: #1877f2;">
+                <div class="year-selector">
+                    <label for="banglaYearSelect"><strong>📅 বাংলা সন বাছুন: </strong></label>
+                    <select id="banglaYearSelect" onchange="updateBanglaPanjikaYear()"></select>
+                </div>
+                <div class="panjika-grid-4">
+                    <div class="category-box" onclick="showBanglaCategoryDetails('ekadashi')">
+                        <i class="fa-solid fa-moon" style="color: #1877f2;"></i>
+                        <h4 style="color: #1877f2;">একাদশী</h4>
+                        <p>সকল তিথি</p>
+                    </div>
+                    <div class="category-box" onclick="showBanglaCategoryDetails('purnima')">
+                        <i class="fa-solid fa-circle" style="color: #1877f2;"></i>
+                        <h4 style="color: #1877f2;">পূর্ণিমা</h4>
+                        <p>সকল তিথি</p>
+                    </div>
+                    <div class="category-box" onclick="showBanglaCategoryDetails('amavasya')">
+                        <i class="fa-solid fa-circle-half-stroke" style="color: #1877f2;"></i>
+                        <h4 style="color: #1877f2;">অমাবস্যা</h4>
+                        <p>সকল তিথি</p>
+                    </div>
+                    <div class="category-box" onclick="showBanglaCategoryDetails('puja')">
+                        <i class="fa-solid fa-fire-flame-curved" style="color: #1877f2;"></i>
+                        <h4 style="color: #1877f2;">বিশেষ পূজা</h4>
+                        <p>উৎসব তালিকা</p>
                     </div>
                 </div>
             </div>
@@ -548,7 +582,7 @@
 
         function verifyAdminLogin() {
             const pass = document.getElementById('adminPasswordInput').value;
-            if(pass === 'amit123') {
+            if(pass === 'admin123') {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminDashboardBox').style.display = 'block';
                 document.querySelectorAll('.delete-media-btn').forEach(btn => btn.style.display = 'block');
@@ -623,6 +657,7 @@
             }
         }
 
+        // Hindu Panjika Years
         const yearSelect = document.getElementById('yearSelect');
         for (let y = 2026; y <= 2070; y++) {
             let opt = document.createElement('option');
@@ -632,7 +667,18 @@
             yearSelect.appendChild(opt);
         }
 
+        // Bangla Panjika Years (1433 corresponds roughly to 2026)
+        const banglaYearSelect = document.getElementById('banglaYearSelect');
+        for (let by = 1433; by <= 1480; by++) {
+            let bOpt = document.createElement('option');
+            bOpt.value = by;
+            bOpt.textContent = by + " বঙ্গাব্দ";
+            if(by === 1433) bOpt.selected = true;
+            banglaYearSelect.appendChild(bOpt);
+        }
+
         let currentEkadashi = [], currentPurnima = [], currentAmavasya = [], currentPuja = [];
+        let currentBanglaEkadashi = [], currentBanglaPurnima = [], currentBanglaAmavasya = [], currentBanglaPuja = [];
 
         function updatePanjikaYear() {
             const yr = parseInt(document.getElementById('yearSelect').value);
@@ -716,6 +762,60 @@
             });
         }
 
+        function updateBanglaPanjikaYear() {
+            const byr = parseInt(document.getElementById('banglaYearSelect').value);
+            document.querySelectorAll('.disp-bangla-year').forEach(el => el.textContent = byr);
+
+            currentBanglaEkadashi = [
+                { name: "पुत्रदा एकादशी", date: `১৪ পৌष, ${byr} বঙ্গাব্দ`, start: "সকাল ০৬:১২ AM", end: "পরদিন ০৪:৩০ AM" },
+                { name: "षटतिला एकादशी", date: `৩০ মাঘ, ${byr} বঙ্গাব্দ`, start: "দুপুর ০১:১০ PM", end: "সন্ধ্যা ০৩:৪০ PM" },
+                { name: "আমলকী एकादशी", date: `২৯ ফাল্গুন, ${byr} বঙ্গাব্দ`, start: "সকাল ০৮:০০ AM", end: "সকাল ১০:২০ AM" },
+                { name: "কমদা একাদশী", date: `৩০ চৈত্র, ${byr} বঙ্গাব্দ`, start: "प्रातः ০৬:৪০ AM", end: "সকাল ০৯:০০ AM" },
+                { name: "মোহিনী একাদশী", date: `২৭ বৈশাখ, ${byr} বঙ্গাব্দ`, start: "সকাল ০৫:১৫ AM", end: "সকাল ০৭:৩৫ AM" },
+                { name: "নিরজলা একাদশী", date: `২৭ জ্যৈষ্ঠ, ${byr} বঙ্গাব্দ`, start: "সকাল ০৭:১০ AM", end: "সকাল ০৯:৩০ AM" },
+                { name: "শয়ন একাদশী", date: `২৫ আষাঢ়, ${byr} বঙ্গাব্দ`, start: "সকাল ০৮:৩০ AM", end: "সকাল ১১:০০ AM" },
+                { name: "পবিত্রা একাদশী", date: `৮ ভাদ্র, ${byr} বঙ্গাব্দ`, start: "দুপুর ১২:০০ PM", end: "দুপুর ০2:৩০ PM" },
+                { name: "পার্শ্ববর্তিনী একাদশী", date: `৫ ভাদ্র, ${byr} বঙ্গাব্দ`, start: "সকাল ০৬:২০ AM", end: "সকাল ০৮:৪৫ AM" },
+                { name: "পাপানকুশা একাদশী", date: `৪ আশ্বিন, ${byr} বঙ্গাব্দ`, start: "দুপুর ০১:০০ PM", end: "দুপুর ০৩:২৫ PM" },
+                { name: "রমা একাদশী", date: `১৯ কার্তিক, ${byr} বঙ্গাব্দ`, start: "সকাল ০৭:০০ AM", end: "সকাল ০৯:২০ AM" },
+                { name: "উৎপন্না একাদশী", date: `১৮ অগ্রহায়ণ, ${byr} বঙ্গাব্দ`, start: "সকাল ০৬:৩০ AM", end: "সকাল ০৮:৫০ AM" }
+            ];
+
+            currentBanglaPurnima = [
+                { name: "পৌष पूर्णिमा", date: `২৯ পৌष, ${byr} বঙ্গাব্দ`, start: "সকাল ০৮:১০ AM", end: "সকাল ১০:৩৫ AM" },
+                { name: "মাঘী पूर्णिमा", date: `৩০ মাঘ, ${byr} বঙ্গাব্দ`, start: "সন্ধ্যা ০৫:২০ PM", end: "সন্ধ্যা ০৭:৪৫ PM" },
+                { name: "দোল পূর্ণিমা (হোলিকা)", date: `৩০ ফাল্গুন, ${byr} বঙ্গাব্দ`, start: "রাত্রি ১০:১৫ PM", end: "রাত্রি ১২:৪০ AM" },
+                { name: "চৈত্র पूर्णिमा (হনুমান জয়ন্তী)", date: `৩০ চৈত্র, ${byr} বঙ্গাব্দ`, start: "সকাল ০৬:০০ AM", end: "সকাল ০৮:৩০ AM" },
+                { name: "বুদ্ধ পূর্ণিমা (বৈशाখ)", date: `২৮ বৈশাখ, ${byr} বঙ্গাব্দ`, start: "দুপুর ০১:১০ PM", end: "দুপুর ০৩:৪৫ PM" },
+                { name: "বট सावित्री पूर्णिमा (জ্যৈষ্ঠ)", date: `২৭ জ্যৈষ্ঠ, ${byr} বঙ্গাব্দ`, start: "সকাল ০৯:00 AM", end: "সকাল ১১:২০ AM" },
+                { name: "গুরু পূর্ণিমা (আषाढ़)", date: `২৫ আষাঢ়, ${byr} বঙ্গাব্দ`, start: "সকাল ০৭:২০ AM", end: "সকাল ০৯:৫০ AM" },
+                { name: "রাখী পূর্ণিমা (श्रावण)", date: `২৩ শ্রাবণ, ${byr} বঙ্গাব্দ`, start: "দুপুর ০২:০০ PM", end: "সন্ধ্যা ০৪:৩০ PM" },
+                { name: "কোজাগরী লক্ষ্মী পূজা (आश्विन)", date: `১৯ আশ্বিন, ${byr} বঙ্গাব্দ`, start: "সন্ধ্যা ০৫:০০ PM", end: "সন্ধ্যা ০৭:২৫ PM" },
+                { name: "কার্তিক পূর্ণিমা (রাস পূর্ণিমা)", date: `১৯ কার্তিক, ${byr} বঙ্গাব্দ`, start: "সকাল ০৮:00 AM", end: "সকাল ১০:২৫ AM" }
+            ];
+
+            currentBanglaAmavasya = [
+                { name: "পৌष अमावस्या", date: `১৪ পৌष, ${byr} বঙ্গাব্দ`, start: "সকাল ০৬:৩০ AM", end: "সকাল ০৮:৫৫ AM" },
+                { name: "मौनी अमावस्या (माघ)", date: `১৫ মাঘ, ${byr} বঙ্গাব্দ`, start: "সকাল ০৫:১০ AM", end: "সকাল ০৭:৩৫ AM" },
+                { name: "ফাল্গুনী अमावस्या", date: `১৫ ফাল্গুন, ${byr} বঙ্গাব্দ`, start: "দুপুর ১১:০০ AM", end: "দুপুর ০১:২০ PM" },
+                { name: "চৈত্র अमावस्या", date: `১৪ চৈত্র, ${byr} বঙ্গাব্দ`, start: "সকাল ০৭:00 AM", end: "সকাল ০৯:২৫ AM" },
+                { name: "বৈशाखी अमावस्या", date: `১২ বৈশাখ, ${byr} বঙ্গাব্দ`, start: "সন্ধ্যা ০৪:00 PM", end: "সন্ধ্যা ০৬:২৫ PM" },
+                { name: "রথযাত্রার আগের অমাবস্যা (आषाढ़)", date: `১০ আষাढ़, ${byr} বঙ্গাব্দ`, start: "সকাল ০৬:১৫ AM", end: "সকাল ০৮:৪০ AM" },
+                { name: "মহালয়া अमावस्या (आश्विन)", date: `৩ আশ্বিন, ${byr} বঙ্গাব্দ`, start: "সকাল ০৯:00 AM", end: "সকাল ১১:২৫ AM" },
+                { name: "শ্যামাপূজা ও দীপাবলি (कार्तिक)", date: `২ কার্তিক, ${byr} বঙ্গাব্দ`, start: "সন্ধ্যা ০৬:১০ PM", end: "রাত্রি ০৮:৩৫ PM" }
+            ];
+
+            currentBanglaPuja = [
+                { name: "मकर संक्रांति (পৌष संक्रांति)", date: `২৯ পৌष, ${byr} বঙ্গাব্দ`, start: "प्रातः ০৭:১৫ AM", end: "দুপুর ১২:৩০ PM" },
+                { name: "महाशिवरात्रि", date: `১৩ ফাল্গুন, ${byr} বঙ্গাব্দ`, start: "प्रातः ০৬:00 AM", end: "রাত্রি ১১:৩০ PM" },
+                { name: "বাসন্তী পূজা / বাসন্তী দুর্গোৎসব", date: `৮ চৈত্র, ${byr} বঙ্গাব্দ`, start: "সকাল ০৮:00 AM", end: "সন্ধ্যা ০৮:00 PM" },
+                { name: "বিশেষ বुरिमाँ पूजा (नारायणपुर)", date: `২ বৈশাখ, ${byr} বঙ্গাব্দ`, start: "प्रातः ০৫:00 AM", end: "রাত্রি ১১:00 PM" },
+                { name: "श्री कृष्ण जन्माष्टमी", date: `२८ শ্রাবণ, ${byr} বঙ্গাব্দ`, start: "রাত্রি ০৮:00 AM", end: "রাত্রি ১২:৪৫ AM" },
+                { name: "দুর্গোৎসব (महाषष्ठी)", date: `१ আশ্বিন, ${byr} বঙ্গাব্দ`, start: "प्रातः ০৬:৩০ AM", end: "संध्या 07:00 PM" },
+                { name: "विशाल काली पूजा", date: `২ কার্তিক, ${byr} বঙ্গাব্দ`, start: "संध्या 07:00 PM", end: "রাত্রি ০৩:00 AM" }
+            ];
+        }
+
         function showCategoryDetails(type) {
             let title = "", listData = [];
             if(type === 'ekadashi') { title = "एकादशी तिथियां"; listData = currentEkadashi; }
@@ -736,11 +836,32 @@
             document.getElementById('detailModal').style.display = 'flex';
         }
 
+        function showBanglaCategoryDetails(type) {
+            let title = "", listData = [];
+            if(type === 'ekadashi') { title = "একাদশী তিথি তালিকা (বাংলা)"; listData = currentBanglaEkadashi; }
+            else if(type === 'purnima') { title = "পূর্ণিমা তিথি তালিকা (বাংলা)"; listData = currentBanglaPurnima; }
+            else if(type === 'amavasya') { title = "অমাবস্যা তিথি তালিকা (বাংলা)"; listData = currentBanglaAmavasya; }
+            else if(type === 'puja') { title = "বিশেষ পূজা তালিকা (বাংলা)"; listData = currentBanglaPuja; }
+
+            document.getElementById('modalTitle').textContent = title;
+            let htmlContent = "";
+            listData.forEach(item => {
+                htmlContent += `<div class="modal-list-item">
+                    <div class="t-name">🛕 ${item.name}</div>
+                    <div class="t-date">📅 তারিখ: ${item.date}</div>
+                    <div class="t-time">⏳ সময়: ${item.start} থেকে ${item.end}</div>
+                </div>`;
+            });
+            document.getElementById('modalBodyList').innerHTML = htmlContent;
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
         function closeModal() {
             document.getElementById('detailModal').style.display = 'none';
         }
 
         updatePanjikaYear();
+        updateBanglaPanjikaYear();
     </script>
 </body>
 </html>
