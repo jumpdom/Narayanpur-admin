@@ -166,7 +166,7 @@
         .member-name { font-size: 1rem; font-weight: 700; color: #222; margin-bottom: 4px; }
         .member-info { font-size: 0.8rem; color: #555; margin-bottom: 2px; }
 
-        /* Calendar Card & Table Optimization for Mobile/Display Fit */
+        /* Calendar Card */
         .calendar-card {
             background: #fff;
             border-radius: 12px;
@@ -387,7 +387,7 @@
                             <option value="5">आश्विन / আশ্বিন</option>
                             <option value="6">कार्तिक / কার্তিক</option>
                             <option value="7">अग्रेषण / অগ্রহায়ণ</option>
-                            <option value="8">पौष / পৌष</option>
+                            <option value="8">পৌष / পৌष</option>
                             <option value="9">माघ / মাঘ</option>
                             <option value="10">फाल्गुन / ফাল্গুন</option>
                             <option value="11">चैत्र / চৈত্র</option>
@@ -429,8 +429,9 @@
             <h2 class="section-title" id="adminTitle">एडमिन पैनल (डेटा जोड़ें)</h2>
             <div class="admin-card">
                 <div id="adminLoginBox">
-                    <p style="margin-bottom: 10px; font-weight: 500;" id="txtLoginPrompt">एडमिन पासवर्ड दर्ज करें (default: 1234):</p>
-                    <input type="password" id="adminPasswordInput" placeholder="Password">
+                    <p style="margin-bottom: 10px; font-weight: 500;" id="txtLoginPrompt">एडमिन पासवर्ड दर्ज करें:</p>
+                    <!-- type="password" उपयोग किया गया है ताकि पासवर्ड स्क्रीन पर दिखाई न दे -->
+                    <input type="password" id="adminPasswordInput" placeholder="Password (amit123)">
                     <button onclick="loginAdmin()" id="btnLogin">लॉगिन करें</button>
                 </div>
                 
@@ -638,12 +639,13 @@
 
         function loginAdmin() {
             const pass = document.getElementById('adminPasswordInput').value;
-            if(pass === "1234") {
+            // पासवर्ड 'amit123' सेट किया गया है
+            if(pass === "amit123") {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelBox').style.display = 'block';
                 alert("सफल लॉगिन!");
             } else {
-                alert("गलत पासवर्ड! कृपया '1234' दर्ज करें।");
+                alert("गलत पासवर्ड! कृपया सही पासवर्ड दर्ज करें।");
             }
         }
 
