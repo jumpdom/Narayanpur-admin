@@ -126,12 +126,24 @@
             border-radius: 2px;
         }
 
-        /* Committee Cards Grid */
+        /* Committee Cards Grid - Fixed to display 3 items per line */
         .committee-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .committee-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .committee-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .member-card {
@@ -144,27 +156,27 @@
         }
 
         .member-img {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto 10px;
+            margin: 0 auto 8px;
             border: 2px solid #ff9933;
         }
 
         .member-role {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             background: #ffe6e6;
             color: #b30000;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 8px;
             font-weight: 600;
             display: inline-block;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
-        .member-name { font-size: 1rem; font-weight: 700; color: #222; margin-bottom: 4px; }
-        .member-info { font-size: 0.8rem; color: #555; margin-bottom: 2px; }
+        .member-name { font-size: 0.95rem; font-weight: 700; color: #222; margin-bottom: 2px; }
+        .member-info { font-size: 0.75rem; color: #555; margin-bottom: 2px; }
 
         /* Calendar Card */
         .calendar-card {
@@ -387,7 +399,7 @@
                             <option value="5">आश्विन / আশ্বিন</option>
                             <option value="6">कार्तिक / কার্তিক</option>
                             <option value="7">अग्रेषण / অগ্রহায়ণ</option>
-                            <option value="8">পৌष / পৌष</option>
+                            <option value="8">पौष / পৌष</option>
                             <option value="9">माघ / মাঘ</option>
                             <option value="10">फाल्गुन / ফাল্গুন</option>
                             <option value="11">चैत्र / চৈত্র</option>
@@ -430,7 +442,6 @@
             <div class="admin-card">
                 <div id="adminLoginBox">
                     <p style="margin-bottom: 10px; font-weight: 500;" id="txtLoginPrompt">एडमिन पासवर्ड दर्ज करें:</p>
-                    <!-- type="password" उपयोग किया गया है ताकि पासवर्ड स्क्रीन पर दिखाई न दे -->
                     <input type="password" id="adminPasswordInput" placeholder="Password (amit123)">
                     <button onclick="loginAdmin()" id="btnLogin">लॉगिन करें</button>
                 </div>
@@ -542,7 +553,7 @@
             { name: "भाद्र (ভাদ্র)", days: 31, startDay: 4, daysMap: { 5: {eng: "8 Sep", tithi: "हरतालिका तीज"} } },
             { name: "आश्विन (আশ্বিন)", days: 30, startDay: 6, daysMap: { 1: {eng: "18 Sep", tithi: "মহালয়া"} } },
             { name: "कार्तिक (কার্তিক)", days: 30, startDay: 1, daysMap: { 2: {eng: "19 Oct", tithi: "শ্যামাপূজা"} } },
-            { name: "अग्रेषण (অগ্রহায়ণ)", days: 30, startDay: 3, daysMap: { 18: {eng: "4 Dec", tithi: "উৎপন্না एकादशी"} } },
+            { name: "अग्रेषण (অগ্রহায়ণ)", days: 30, startDay: 3, daysMap: { 18: {eng: "4 Dec", tithi: "उत्পন্না एकादशी"} } },
             { name: "পৌष (পৌष)", days: 30, startDay: 5, daysMap: { 14: {eng: "14 Jan", tithi: "মকর সংক্রান্তি"} } },
             { name: "माघ (মাঘ)", days: 30, startDay: 1, daysMap: { 15: {eng: "13 Feb", tithi: "मौनी अमावस्या"} } },
             { name: "फाल्गुन (ফাল্গুন)", days: 30, startDay: 3, daysMap: { 30: {eng: "31 Mar", tithi: "দোল পূর্ণিমা"} } },
@@ -639,7 +650,6 @@
 
         function loginAdmin() {
             const pass = document.getElementById('adminPasswordInput').value;
-            // पासवर्ड 'amit123' सेट किया गया है
             if(pass === "amit123") {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelBox').style.display = 'block';
