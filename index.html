@@ -126,57 +126,52 @@
             border-radius: 2px;
         }
 
-        /* Committee Cards Grid - Fixed to display 3 items per line */
+        /* Committee Cards Grid - Forced strictly 3 items in one row left-to-right */
         .committee-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 30px;
         }
 
         @media (max-width: 768px) {
             .committee-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .committee-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
             }
         }
 
         .member-card {
             background: #fff;
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 10px;
+            padding: 10px 6px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border-top: 4px solid #b30000;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-top: 3px solid #b30000;
         }
 
         .member-img {
-            width: 70px;
-            height: 70px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto 8px;
+            margin: 0 auto 6px;
             border: 2px solid #ff9933;
         }
 
         .member-role {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             background: #ffe6e6;
             color: #b30000;
-            padding: 2px 6px;
-            border-radius: 8px;
+            padding: 2px 5px;
+            border-radius: 6px;
             font-weight: 600;
             display: inline-block;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
-        .member-name { font-size: 0.95rem; font-weight: 700; color: #222; margin-bottom: 2px; }
-        .member-info { font-size: 0.75rem; color: #555; margin-bottom: 2px; }
+        .member-name { font-size: 0.8rem; font-weight: 700; color: #222; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .member-info { font-size: 0.65rem; color: #555; margin-bottom: 1px; }
 
         /* Calendar Card */
         .calendar-card {
