@@ -126,7 +126,7 @@
             border-radius: 2px;
         }
 
-        /* Committee Cards Grid - Forced strictly 3 items in one row left-to-right */
+        /* Committee Cards Grid - Strict 3 columns left-to-right */
         .committee-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -173,7 +173,36 @@
         .member-name { font-size: 0.8rem; font-weight: 700; color: #222; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .member-info { font-size: 0.65rem; color: #555; margin-bottom: 1px; }
 
-        /* Calendar Card */
+        /* Category Box for Calendar */
+        .calendar-category-box {
+            background: linear-gradient(135deg, #1877f2, #0d47a1);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(24, 119, 242, 0.3);
+            margin-bottom: 30px;
+            transition: 0.3s ease;
+        }
+
+        .calendar-category-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(24, 119, 242, 0.4);
+        }
+
+        .calendar-category-box h3 {
+            font-family: 'Yatra One', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
+        .calendar-category-box p {
+            font-size: 0.85rem;
+            color: #e3f2fd;
+        }
+
+        /* Calendar Card Container (Hidden by default) */
         .calendar-card {
             background: #fff;
             border-radius: 12px;
@@ -182,6 +211,7 @@
             border-left: 5px solid #1877f2;
             margin-bottom: 30px;
             overflow-x: auto;
+            display: none; /* Initially hidden */
         }
 
         .cal-controls {
@@ -372,10 +402,16 @@
             </div>
         </section>
 
-        <!-- FULL 2026-2099 CALENDAR -->
-        <section id="fullBanglaCalendar">
-            <h2 class="section-title" id="calMainTitle">বাঙালি ১২ মাসের পঞ্জিকা ক্যালেন্ডার (2026 - 2099)</h2>
-            <div class="calendar-card">
+        <!-- CALENDAR CATEGORY BOX (Click to open Calendar) -->
+        <section id="calendarCategorySection">
+            <h2 class="section-title" id="calMainTitle">पंचांग एवं कैलेंडर (2026 - 2099)</h2>
+            <div class="calendar-category-box" onclick="toggleCalendarView()">
+                <h3 id="catBoxHeading"><i class="fa-solid fa-calendar-days"></i> बंगाली 12 मास पंजिका, एकादशी, पूर्णिमा और व्रत सूची</h3>
+                <p id="catBoxSub">कैलेंडर देखने के लिए यहाँ क्लिक करें (Click to Open Calendar & Tithi List)</p>
+            </div>
+
+            <!-- FULL 2026-2099 CALENDAR (Hidden initially, opens on click) -->
+            <div class="calendar-card" id="calendarCardContainer">
                 <div class="cal-controls">
                     <div>
                         <label for="cYearSelect"><strong id="lblYear">साल: </strong></label>
@@ -394,7 +430,7 @@
                             <option value="5">आश्विन / আশ্বিন</option>
                             <option value="6">कार्तिक / কার্তিক</option>
                             <option value="7">अग्रेषण / অগ্রহায়ণ</option>
-                            <option value="8">पौष / পৌष</option>
+                            <option value="8">পৌष / পৌष</option>
                             <option value="9">माघ / মাঘ</option>
                             <option value="10">फाल्गुन / ফাল্গুন</option>
                             <option value="11">चैत्र / চৈত্র</option>
@@ -498,7 +534,9 @@
             hi: {
                 title: "Narayanpur Puja Committee - पूर्ण पोर्टल",
                 teamTitle: "कमेटी के मुख्य पदाधिकारी एवं सदस्य",
-                calTitle: "বাঙালি ১২ মাসের পঞ্জিকা ক্যালেন্ডার (2026 - 2099)",
+                calTitle: "पंचांग एवं कैलेंडर (2026 - 2099)",
+                catBoxHeading: "बंगाली 12 मास पंजिका, एकादशी, पूर्णिमा और व्रत सूची",
+                catBoxSub: "कैलेंडर देखने के लिए यहाँ क्लिक करें",
                 galleryTitle: "उत्सव गैलरी",
                 adminTitle: "एडमिन पैनल (डेटा जोड़ें)",
                 navTeam: "कमेटी टीम", navCal: "कैलेंडर", navGallery: "गैलरी", navAdmin: "एडमिन",
@@ -507,7 +545,9 @@
             bn: {
                 title: "Narayanpur Puja Committee - সম্পূর্ণ পোর্টাল",
                 teamTitle: "কমিটির মূল পদাধিকারী ও সদস্যগণ",
-                calTitle: "বাঙালি ১২ মাসের পঞ্জিকা ক্যালেন্ডার (২০২৬ - ২০৯৯)",
+                calTitle: "পঞ্জিকা এবং ক্যালেন্ডার (২০২৬ - ২০৯৯)",
+                catBoxHeading: "বাংলা ১২ মাসের পঞ্জিকা, একাদশী, পূর্ণিমা ও ব্রত তালিকা",
+                catBoxSub: "ক্যালেন্ডার দেখতে এখানে ক্লিক করুন",
                 galleryTitle: "উৎসব গ্যালরী",
                 adminTitle: "এডমিন প্যানেল (ডেটা যোগ করুন)",
                 navTeam: "কমিটি টিম", navCal: "পঞ্জিকা", navGallery: "গ্যালরী", navAdmin: "এডমিন",
@@ -522,6 +562,8 @@
             document.getElementById('pageTitle').textContent = dict[lang].title;
             document.getElementById('teamTitle').textContent = dict[lang].teamTitle;
             document.getElementById('calMainTitle').textContent = dict[lang].calTitle;
+            document.getElementById('catBoxHeading').innerHTML = `<i class="fa-solid fa-calendar-days"></i> ` + dict[lang].catBoxHeading;
+            document.getElementById('catBoxSub').textContent = dict[lang].catBoxSub;
             document.getElementById('galleryTitle').textContent = dict[lang].galleryTitle;
             document.getElementById('adminTitle').textContent = dict[lang].adminTitle;
             document.getElementById('navTeam').textContent = dict[lang].navTeam;
@@ -529,6 +571,17 @@
             document.getElementById('navGallery').textContent = dict[lang].navGallery;
             document.getElementById('navAdmin').textContent = dict[lang].navAdmin;
             loadCommitteeMembers();
+        }
+
+        // Toggle function to open/close calendar view on category box click
+        function toggleCalendarView() {
+            const calCard = document.getElementById('calendarCardContainer');
+            if (calCard.style.display === 'block') {
+                calCard.style.display = 'none';
+            } else {
+                calCard.style.display = 'block';
+                renderFullCalendar();
+            }
         }
 
         function populateYears() {
@@ -540,19 +593,20 @@
             select.innerHTML = html;
         }
 
+        // Months data including Ekadashi, Purnima, and Tithi details
         const banglaMonthsData = [
-            { name: "वैशाख (বৈশাখ)", days: 30, startDay: 2, daysMap: { 1: {eng: "14 Apr", tithi: "पहेला বৈশাখ / नववर्ष"} } },
-            { name: "ज्येष्ठ (জ্যৈষ্ঠ)", days: 31, startDay: 4, daysMap: { 12: {eng: "15 May", tithi: "बट सावित्री व्रत"} } },
-            { name: "आषाढ़ (আষাঢ়)", days: 31, startDay: 6, daysMap: { 10: {eng: "14 Jul", tithi: "রথযাত্রা উৎসব"} } },
-            { name: "श्रावण (শ্রাবণ)", days: 31, startDay: 2, daysMap: { 28: {eng: "31 Aug", tithi: "श्री কৃষ্ণ জন্মাষ্টমী"} } },
-            { name: "भाद्र (ভাদ্র)", days: 31, startDay: 4, daysMap: { 5: {eng: "8 Sep", tithi: "हरतालिका तीज"} } },
-            { name: "आश्विन (আশ্বিন)", days: 30, startDay: 6, daysMap: { 1: {eng: "18 Sep", tithi: "মহালয়া"} } },
-            { name: "कार्तिक (কার্তিক)", days: 30, startDay: 1, daysMap: { 2: {eng: "19 Oct", tithi: "শ্যামাপূজা"} } },
-            { name: "अग्रेषण (অগ্রহায়ণ)", days: 30, startDay: 3, daysMap: { 18: {eng: "4 Dec", tithi: "उत्পন্না एकादशी"} } },
-            { name: "পৌष (পৌष)", days: 30, startDay: 5, daysMap: { 14: {eng: "14 Jan", tithi: "মকর সংক্রান্তি"} } },
-            { name: "माघ (মাঘ)", days: 30, startDay: 1, daysMap: { 15: {eng: "13 Feb", tithi: "मौनी अमावस्या"} } },
-            { name: "फाल्गुन (ফাল্গুন)", days: 30, startDay: 3, daysMap: { 30: {eng: "31 Mar", tithi: "দোল পূর্ণিমা"} } },
-            { name: "चैत्र (চৈত্র)", days: 30, startDay: 6, daysMap: { 30: {eng: "13 Apr", tithi: "চৈত্র সংক্রান্তি"} } }
+            { name: "वैशाख (বৈশাখ)", days: 30, startDay: 2, daysMap: { 1: {eng: "14 Apr", tithi: "पहेला বৈশাখ / नववर्ष"}, 11: {eng: "24 Apr", tithi: "मोहिनी एकादशी"}, 26: {eng: "9 May", tithi: "बुद्ध पूर्णिमा"} } },
+            { name: "ज्येष्ठ (জ্যৈষ্ঠ)", days: 31, startDay: 4, daysMap: { 10: {eng: "13 May", tithi: "अपरा एकादशी"}, 12: {eng: "15 May", tithi: "बट सावित्री व्रत"}, 25: {eng: "28 May", tithi: "ज्येष्ठ पूर्णिमा"} } },
+            { name: "आषाढ़ (আষাঢ়)", days: 31, startDay: 6, daysMap: { 9: {eng: "13 Jul", tithi: "योगिनी एकादशी"}, 10: {eng: "14 Jul", tithi: "রথযাত্রা উৎসব"}, 24: {eng: "27 Jul", tithi: "गुरु पूर्णिमा"} } },
+            { name: "श्रावण (শ্রাবণ)", days: 31, startDay: 2, daysMap: { 10: {eng: "12 Aug", tithi: "श्रावण पुत्रदा एकादशी"}, 23: {eng: "25 Aug", tithi: "रक्षा बंधन / पूर्णिमा"}, 28: {eng: "31 Aug", tithi: "श्री কৃষ্ণ জন্মাষ্টমী"} } },
+            { name: "भाद्र (ভাদ্র)", days: 31, startDay: 4, daysMap: { 5: {eng: "8 Sep", tithi: "हरतालिका तीज"}, 9: {eng: "11 Sep", tithi: "अजा एकादशी"}, 22: {eng: "24 Sep", tithi: "भाद्रपद पूर्णिमा"} } },
+            { name: "आश्विन (আश्विन)", days: 30, startDay: 6, daysMap: { 1: {eng: "18 Sep", tithi: "মহালয়া"}, 8: {eng: "25 Sep", tithi: "पापांकुशा एकादशी"}, 22: {eng: "9 Oct", tithi: "शरद पूर्णिमा / कोजागरी"} } },
+            { name: "कार्तिक (কার্তিক)", days: 30, startDay: 1, daysMap: { 2: {eng: "19 Oct", tithi: "শ্যামাপূজা & दीपावली"}, 7: {eng: "24 Oct", tithi: "देवोत्थान एकादशी"}, 21: {eng: "7 Nov", tithi: "कार्तिक पूर्णिमा"} } },
+            { name: "अग्रेषण (অগ্রহায়ণ)", days: 30, startDay: 3, daysMap: { 6: {eng: "22 Nov", tithi: "मोक्षदा एकादशी"}, 18: {eng: "4 Dec", tithi: "उत्পন্না एकादशी"}, 21: {eng: "7 Dec", tithi: "मार्गशीर्ष पूर्णिमा"} } },
+            { name: "পৌष (পৌष)", days: 30, startDay: 5, daysMap: { 6: {eng: "21 Dec", tithi: "सफला एकादशी"}, 14: {eng: "14 Jan", tithi: "মকর সংক্রান্তি"}, 20: {eng: "4 Jan", tithi: "पौष पूर्णिमा"} } },
+            { name: "माघ (মাঘ)", days: 30, startDay: 1, daysMap: { 5: {eng: "20 Jan", tithi: "षटतिला एकादशी"}, 15: {eng: "13 Feb", tithi: "मौनी अमावस्या"}, 19: {eng: "2 Feb", tithi: "माघ पूर्णिमा"} } },
+            { name: "फाल्गुन (ফাল্গুন)", days: 30, startDay: 3, daysMap: { 4: {eng: "19 Feb", tithi: "বিজয়া एकादशी"}, 30: {eng: "31 Mar", tithi: "দোল পূর্ণিমা / হোলিকা"} } },
+            { name: "चैत्र (চৈত্র)", days: 30, startDay: 6, daysMap: { 5: {eng: "20 Mar", tithi: "আমলকী एकादशी"}, 20: {eng: "4 Apr", tithi: "चैत्र पूर्णिमा / हनुमान जयंती"}, 30: {eng: "13 Apr", tithi: "চৈত্র সংক্রান্তি"} } }
         ];
 
         function toBengaliNum(n) {
@@ -717,7 +771,6 @@
 
         window.onload = function() {
             populateYears();
-            renderFullCalendar();
             loadCommitteeMembers();
             loadGallery();
         };
